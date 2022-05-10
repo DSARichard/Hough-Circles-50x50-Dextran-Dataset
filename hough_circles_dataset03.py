@@ -90,9 +90,13 @@ while(success):
   
   # next frame
   success, img = vidcap.read()
+  if(img is None):
+    continue
+  img = np.uint8(cv2.cvtColor(np.float32(img), cv2.COLOR_BGR2GRAY))
+  img = img[:, left_tube_wall:right_tube_wall]
   count += 1
-  if(count > 0):
-    break
+  # if(count > 0):
+  #   break
 
 # write json file
 json_dict = f'''{{
