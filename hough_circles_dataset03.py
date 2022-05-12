@@ -34,6 +34,7 @@ wall_ind = np.where(img_brt[1:] - img_brt[:-1] > 50)[0][1]
 right_tube_wall = (img_brt[wall_ind] + img_brt[wall_ind + 1])//2 + 37
 left_tube_wall = right_tube_wall - 72
 img = img[:, left_tube_wall:right_tube_wall]
+cv2.imwrite("dextran_frames/frame000.jpg", img)
 
 
 
@@ -67,6 +68,7 @@ annotations = [
 
 # add images and annotations
 count = 0
+prev_bbox = 0
 while(success):
   # detect circles and write JSON file
   bbox = circle_detect(img).T
@@ -74,19 +76,22 @@ while(success):
     "id": count,
     "width": 72,
     "height": 720,
-    "file_name": "frame" + str(count).zfill(3) + ".jpg",
+    "file_name": "dextran_frames/frame" + str(count).zfill(3) + ".jpg",
     "license": 0,
-    "date_captured": "2022-5-10 00:00:00" # datetime.datetime.utcnow().isoformat(" ")[:-7]
+    "flickr_url": None,
+    "coco_url": None,
+    "date_captured": None
   }
   images.append(image)
   for bbox_id in range(len(bbox)):
     annotation = {
-      "id": bbox_id,
+      "id": prev_bbox + bbox_id,
       "image_id": count,
       "category_id": 0,
       "bbox": bbox[bbox_id].tolist(),
     }
     annotations.append(annotation)
+  prev_bbox = bbox_id + 1
   
   # next frame
   success, img = vidcap.read()
@@ -95,6 +100,7 @@ while(success):
   img = np.uint8(cv2.cvtColor(np.float32(img), cv2.COLOR_BGR2GRAY))
   img = img[:, left_tube_wall:right_tube_wall]
   count += 1
+  cv2.imwrite("dextran_frames/frame" + str(count).zfill(3) + ".jpg", img)
   # if(count > 0):
   #   break
 
@@ -105,7 +111,7 @@ json_dict = f'''{{
   'categories': {categories},
   'images': {images},
   'annotations': {annotations}
-}}'''
+}}'''.replace("None", "null")
 f = open("dextran_v03_50x50_dataset.json", "wt")
 f.write(json_dict)
 f.close()
