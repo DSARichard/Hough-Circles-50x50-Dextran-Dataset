@@ -106,12 +106,12 @@ while(success):
 
 # write json file
 json_dict = f'''{{
-  'info': {info},
-  'licences': {licenses},
-  'categories': {categories},
-  'images': {images},
-  'annotations': {annotations}
-}}'''.replace("None", "null")
+  "info": {info},
+  "licences": {licenses},
+  "categories": {categories},
+  "images": {images},
+  "annotations": {annotations}
+}}'''.replace("None", "null").replace("'", '"')
 f = open("dextran_v03_50x50_dataset.json", "wt")
 f.write(json_dict)
 f.close()
