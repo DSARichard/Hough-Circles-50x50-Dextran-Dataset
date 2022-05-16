@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-import datetime
+import os
 
 # circle detection
 def circle_detect(gray_image):
@@ -25,6 +25,10 @@ def circle_detect(gray_image):
 vidcap = cv2.VideoCapture("dextran_v01.mp4")
 success, img = vidcap.read()
 img = np.uint8(cv2.cvtColor(np.float32(img), cv2.COLOR_BGR2GRAY))
+
+# create image frames folder
+if(not os.path.exists("dextran_frames")):
+  os.makedirs("dextran_frames")
 
 # detect tube inner wall indices based on brightness
 # tube width normalized to 72
