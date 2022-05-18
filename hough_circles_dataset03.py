@@ -15,10 +15,12 @@ def circle_detect(gray_image):
   # detect circles
   # determine top left corner, width, and height of circle"s bounding box
   circles = cv2.HoughCircles(gray_image, cv2.HOUGH_GRADIENT, 1.05, 5, param2 = 8.5, minRadius = 1, maxRadius = 7)
-  top = np.int_(np.round(circles[0, :, 1]))
-  left = np.int_(np.round(circles[0, :, 0]))
+  radii = np.int_(np.round(circles[0, :, 2]))
+  left = np.int_(np.round(circles[0, :, 0])) - radii
+  top = np.int_(np.round(circles[0, :, 1])) - radii
+  left, top = np.clip(left, 0, 72), np.clip(top, 0, 720)
   width, height = (np.int_(np.round(circles[0, :, 2]*2)),)*2
-  return np.array([top, left, width, height])
+  return np.array([left, top, width, height])
 
 # custom list of frames
 # note that these should come frome the same video
