@@ -24,7 +24,7 @@ def circle_detect(gray_image):
 
 # custom list of frames
 # note that these should come frome the same video
-vidcap = cv2.VideoCapture("dextran_v01.mp4")
+vidcap = cv2.VideoCapture("dextran_50x50_all.mp4")
 success, img = vidcap.read()
 img = np.uint8(cv2.cvtColor(np.float32(img), cv2.COLOR_BGR2GRAY))
 
@@ -48,10 +48,10 @@ cv2.imwrite("dextran_frames/frame000.jpg", img)
 info = {
   "description": "Hough Circles Dataset",
   "url": "https://github.com/DSARichard/Hough-Circles-50x50-Dextran-Dataset",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "year": 2022,
   "contributor": "DSARichard",
-  "date_created": "2022-5-10 00:00:00" # datetime.datetime.utcnow().isoformat(" ")[:-7]
+  "date_created": "2022-5-23 21:00:00" # datetime.datetime.utcnow().isoformat(" ")[:-7]
 }
 licenses = [
   {
@@ -104,6 +104,11 @@ while(success):
   if(img is None):
     continue
   img = np.uint8(cv2.cvtColor(np.float32(img), cv2.COLOR_BGR2GRAY))
+  img_brt = np.mean(img, axis = 0)
+  img_brt = np.where(img_brt <= 88)[0]
+  wall_ind = np.where(img_brt[1:] - img_brt[:-1] > 50)[0][1]
+  right_tube_wall = (img_brt[wall_ind] + img_brt[wall_ind + 1])//2 + 37
+  left_tube_wall = right_tube_wall - 72
   img = img[:, left_tube_wall:right_tube_wall]
   count += 1
   cv2.imwrite("dextran_frames/frame" + str(count).zfill(3) + ".jpg", img)
@@ -118,6 +123,6 @@ json_dict = f'''{{
   "images": {images},
   "annotations": {annotations}
 }}'''.replace("None", "null").replace("'", '"')
-f = open("dextran_v03_50x50_dataset.json", "wt")
+f = open("dextran_v03b_50x50_dataset.json", "wt")
 f.write(json_dict)
 f.close()
