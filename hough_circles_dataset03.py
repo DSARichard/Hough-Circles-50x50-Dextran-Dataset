@@ -40,7 +40,7 @@ wall_ind = np.where(img_brt[1:] - img_brt[:-1] > 50)[0][1]
 right_tube_wall = (img_brt[wall_ind] + img_brt[wall_ind + 1])//2 + 37
 left_tube_wall = right_tube_wall - 72
 img = img[:, left_tube_wall:right_tube_wall]
-cv2.imwrite("dextran_frames/frame000.jpg", img)
+cv2.imwrite("dextran_frames/frame0000.jpg", img)
 
 
 
@@ -82,7 +82,7 @@ while(success):
     "id": count,
     "width": 72,
     "height": 720,
-    "file_name": "dextran_frames/frame" + str(count).zfill(3) + ".jpg",
+    "file_name": "dextran_frames/frame" + str(count).zfill(4) + ".jpg",
     "license": 0,
     "flickr_url": None,
     "coco_url": None,
@@ -111,7 +111,7 @@ while(success):
   left_tube_wall = right_tube_wall - 72
   img = img[:, left_tube_wall:right_tube_wall]
   count += 1
-  cv2.imwrite("dextran_frames/frame" + str(count).zfill(3) + ".jpg", img)
+  cv2.imwrite("dextran_frames/frame" + str(count).zfill(4) + ".jpg", img)
   # if(count > 0):
   #   break
 
