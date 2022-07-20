@@ -13,7 +13,7 @@ def circle_detect(gray_image):
   gray_image = cv2.filter2D(gray_image, -1, sharpening_kernel)
   
   # detect circles
-  # determine top left corner, width, and height of circle"s bounding box
+  # determine top left corner, width, and height of circle's bounding box
   circles = cv2.HoughCircles(gray_image, cv2.HOUGH_GRADIENT, 1.05, 5, param2 = 8.5, minRadius = 1, maxRadius = 7)
   radii = np.int_(np.round(circles[0, :, 2]))
   left = np.int_(np.round(circles[0, :, 0])) - radii
